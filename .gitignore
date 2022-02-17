@@ -18,6 +18,8 @@ crash.log
 # are not checked in
 override.tf
 override.tf.json
+terraform.tfvars
+variables.tf
 *_override.tf
 *_override.tf.json
 
