@@ -1,0 +1,96 @@
+  container_definitions = <<DEFINITION
+  [
+    {
+      "name": "${var.app_name}-${var.app_environment}-container",
+      "image": "${aws_ecr_repository.repository.repository_url}:latest",
+      "entryPoint": [],
+      "environment": ${data.template_file.env_vars.rendered},
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${aws_cloudwatch_log_group.log_group.id}",
+          "awslogs-region": "${var.aws_region}",
+          "awslogs-stream-prefix": "${var.app_name}-${var.app_environment}"
+        }
+      },
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ],
+      "cpu": 256,
+      "memory": 512,
+      "networkMode": "awsvpc"
+    }
+  ]
+  DEFINITION
+
+
+
+NAME   := farvisun/javabina
+TAG    := $$(git log -1 --pretty=%h)
+IMG    := ${NAME}:${TAG}
+LATEST := ${NAME}:latest
+
+app_build:
+    docker build -t ${IMG} -f javabina.dockerfile . && \
+    docker tag ${IMG} ${LATEST}
+
+app_up:
+    docker-compose -p farvisun-javabina up -d javabina
+
+
+    │ Error: local-exec provisioner error
+│ 
+│   with null_resource.setup_db4,
+│   on rds.tf line 80, in resource "null_resource" "setup_db4":
+│   80:   provisioner "local-exec" {
+│ 
+│ Error running command 'mysql --port=3306 --user=DB_USERNAME --password=DB_PASSWORD
+│ --host=mysqlinstance.cgdizvert0bq.eu-central-1.rds.amazonaws.com < ./scripts/4_update_data_for_homeworks.sql':
+│ exit status 1. Output: ERROR 1832 (HY000) at line 377: Cannot change column 'CreatedBy': used in a foreign key
+│ constraint 'FK_AccountOfHomework'
+
+docker-workflow
+amazon-ecs
+aws-credentials
+docker-build-publish
+s3
+amazon-ecr
+antisamy-markup-formatter
+build-timeout
+timestamper
+resource-disposer
+ws-cleanup
+gradle
+pipeline-graph-view
+pipeline-rest-api
+pipeline-stage-view
+lockable-resources
+workflow-aggregator
+pipeline-github-lib
+subversion
+pam-auth
+ldap
+email-ext
+
+
+ECS status - 2 of 2 complete demo
+ECS cluster
+ECS Cluster demo successfully created
+CloudFormation Stack
+CloudFormation stack EC2ContainerService-demo and its resources successfully created
+Cluster Resources
+
+    VPC vpc-056b9ffd8a2046dfc
+    Subnet 1 subnet-0f90edf8bed9c9adf
+    Subnet 1 route table association rtbassoc-07750895969f109ce
+    Subnet 2 subnet-0850da14e9db57c32
+    Subnet 2 route table association rtbassoc-0097d148a7bf340de
+    VPC Availability Zones eu-central-1a, eu-central-1b, eu-central-1c
+    Internet gateway igw-0128deb816b9207a7
+    Route table rtb-0f023428e9a49667d
+    Amazon EC2 route EC2Co-Publi-GIM3U6K9C2VE
+    Virtual private gateway attachment EC2Co-Attac-Z6LTSDA1DS1Y
